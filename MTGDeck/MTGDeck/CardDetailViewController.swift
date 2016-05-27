@@ -27,6 +27,10 @@ extension CardDetailViewController {
         nameLabel?.text = card?.name
         manaCostLabel?.text = card?.manaCostString
         typeLabel?.text = card?.text
+        if let image = card?.image {
+            cardArtImageView?.image = image
+            return
+        }
         guard let cardToDisplay = card else { return }
         DataManager.sharedManager.artDownloader.artForCard(cardToDisplay, completion: { (image) in
             guard let image = image else { return }

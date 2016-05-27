@@ -34,6 +34,7 @@ class CollectionViewController: UIViewController {
 
 extension CollectionViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let controller = storyboard?.instantiateViewControllerWithIdentifier("CardDetailViewController") as! CardDetailViewController
         controller.card = cardDataSource?.items[indexPath.row]
         showViewController(controller, sender: self)
