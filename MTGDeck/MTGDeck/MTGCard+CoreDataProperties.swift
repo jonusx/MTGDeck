@@ -13,7 +13,8 @@ import Foundation
 import CoreData
 
 extension MTGCard {
-
+    
+    @NSManaged var colorString: String?
     @NSManaged var cardID: String?
     @NSManaged var convertedManaCost: NSNumber?
     @NSManaged var flavor: String?

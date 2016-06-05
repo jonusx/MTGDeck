@@ -33,6 +33,16 @@
 		001EE48E1CF7A4E1000CA03E /* MTGDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001EE48C1CF7A4E1000CA03E /* MTGDeck.swift */; };
 		001EE4911CF7A692000CA03E /* MTGCardInDeck+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001EE48F1CF7A692000CA03E /* MTGCardInDeck+CoreDataProperties.swift */; };
 		001EE4921CF7A692000CA03E /* MTGCardInDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001EE4901CF7A692000CA03E /* MTGCardInDeck.swift */; };
+		002132BD1CFE0F91007F71CF /* FNMFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002132BC1CFE0F91007F71CF /* FNMFinder.swift */; };
+		009F6F9A1D03737000427E91 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009F6F931D03735600427E91 /* Charts.framework */; };
+		009F6F9B1D03737000427E91 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 009F6F931D03735600427E91 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		009F6FA11D03744200427E91 /* ManaDistributionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F6FA01D03744200427E91 /* ManaDistributionCell.swift */; };
+		009F6FA41D0374F800427E91 /* DeckBreakdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F6FA31D0374F800427E91 /* DeckBreakdownViewController.swift */; };
+		009F6FA91D03999E00427E91 /* StatsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F6FA81D03999E00427E91 /* StatsHelper.swift */; };
+		009F6FAB1D039AA400427E91 /* ManaCurveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F6FAA1D039AA400427E91 /* ManaCurveCell.swift */; };
+		009F6FAD1D03D77C00427E91 /* ImageSearchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F6FAC1D03D77C00427E91 /* ImageSearchOperation.swift */; };
+		009F6FAF1D04918700427E91 /* OCRPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F6FAE1D04918700427E91 /* OCRPreviewController.swift */; };
+		009F6FB11D04B7CD00427E91 /* FisherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F6FB01D04B7CD00427E91 /* FisherViewController.swift */; };
 		00AA565D1CF0F2E00035AA1C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA565C1CF0F2E00035AA1C /* DataManager.swift */; };
 		00AC43E21CE925280064F3D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AC43E11CE925280064F3D2 /* AppDelegate.swift */; };
 		00AC43E41CE925280064F3D2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AC43E31CE925280064F3D2 /* ViewController.swift */; };
@@ -41,6 +51,58 @@
 		00AC43EC1CE925280064F3D2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00AC43EA1CE925280064F3D2 /* LaunchScreen.storyboard */; };
 		00AC43F41CE92FC50064F3D2 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AC43F31CE92FC50064F3D2 /* MapKit.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		009F6F921D03735600427E91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 009F6F8B1D03735500427E91 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5BA8EC401A9D14DC00CE82E1;
+			remoteInfo = "Charts-iOS";
+		};
+		009F6F941D03735600427E91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 009F6F8B1D03735500427E91 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A52C5C371BAC5CA400594CDD;
+			remoteInfo = "Charts-TV";
+		};
+		009F6F961D03735600427E91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 009F6F8B1D03735500427E91 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 65B3F5BF1C7370BE000983D0;
+			remoteInfo = "Charts-OSX";
+		};
+		009F6F981D03735600427E91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 009F6F8B1D03735500427E91 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06AEE7A21BDC3F8B009875AE;
+			remoteInfo = ChartsTests;
+		};
+		009F6F9C1D03737000427E91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 009F6F8B1D03735500427E91 /* Charts.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5BA8EC3F1A9D14DC00CE82E1;
+			remoteInfo = "Charts-iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		009F6F9E1D03737000427E91 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				009F6F9B1D03737000427E91 /* Charts.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		001EE40B1CF0F453000CA03E /* MTGDeck-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MTGDeck-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -81,6 +143,15 @@
 		001EE48C1CF7A4E1000CA03E /* MTGDeck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MTGDeck.swift; sourceTree = SOURCE_ROOT; };
 		001EE48F1CF7A692000CA03E /* MTGCardInDeck+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "MTGCardInDeck+CoreDataProperties.swift"; path = "../MTGCardInDeck+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		001EE4901CF7A692000CA03E /* MTGCardInDeck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MTGCardInDeck.swift; path = ../MTGCardInDeck.swift; sourceTree = "<group>"; };
+		002132BC1CFE0F91007F71CF /* FNMFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FNMFinder.swift; sourceTree = "<group>"; };
+		009F6F8B1D03735500427E91 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = ../Charts/Charts/Charts.xcodeproj; sourceTree = "<group>"; };
+		009F6FA01D03744200427E91 /* ManaDistributionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManaDistributionCell.swift; sourceTree = "<group>"; };
+		009F6FA31D0374F800427E91 /* DeckBreakdownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeckBreakdownViewController.swift; sourceTree = "<group>"; };
+		009F6FA81D03999E00427E91 /* StatsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsHelper.swift; sourceTree = "<group>"; };
+		009F6FAA1D039AA400427E91 /* ManaCurveCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManaCurveCell.swift; sourceTree = "<group>"; };
+		009F6FAC1D03D77C00427E91 /* ImageSearchOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSearchOperation.swift; sourceTree = "<group>"; };
+		009F6FAE1D04918700427E91 /* OCRPreviewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCRPreviewController.swift; sourceTree = "<group>"; };
+		009F6FB01D04B7CD00427E91 /* FisherViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FisherViewController.swift; sourceTree = "<group>"; };
 		00AA565C1CF0F2E00035AA1C /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		00AC43DE1CE925280064F3D2 /* MTGDeck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MTGDeck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00AC43E11CE925280064F3D2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -98,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00AC43F41CE92FC50064F3D2 /* MapKit.framework in Frameworks */,
+				009F6F9A1D03737000427E91 /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,13 +216,56 @@
 				001EE4681CF52226000CA03E /* CardDetailViewController.swift */,
 				001EE46C1CF60A7E000CA03E /* CollectionViewController.swift */,
 				001EE43A1CF18B45000CA03E /* CardSearchViewController.swift */,
+				009F6FAE1D04918700427E91 /* OCRPreviewController.swift */,
+				009F6FAC1D03D77C00427E91 /* ImageSearchOperation.swift */,
 			);
 			name = Cards;
+			sourceTree = "<group>";
+		};
+		002132BB1CFE0F6D007F71CF /* FNMFinder */ = {
+			isa = PBXGroup;
+			children = (
+				002132BC1CFE0F91007F71CF /* FNMFinder.swift */,
+			);
+			name = FNMFinder;
+			sourceTree = "<group>";
+		};
+		009F6F8C1D03735500427E91 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				009F6F931D03735600427E91 /* Charts.framework */,
+				009F6F951D03735600427E91 /* Charts.framework */,
+				009F6F971D03735600427E91 /* Charts.framework */,
+				009F6F991D03735600427E91 /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		009F6F9F1D03741500427E91 /* ChartCells */ = {
+			isa = PBXGroup;
+			children = (
+				009F6FA01D03744200427E91 /* ManaDistributionCell.swift */,
+				009F6FAA1D039AA400427E91 /* ManaCurveCell.swift */,
+			);
+			name = ChartCells;
+			sourceTree = "<group>";
+		};
+		009F6FA21D0374D100427E91 /* Decks */ = {
+			isa = PBXGroup;
+			children = (
+				001EE46A1CF609C4000CA03E /* DeckViewController.swift */,
+				001EE4891CF7840A000CA03E /* DeckDetailViewController.swift */,
+				009F6FA31D0374F800427E91 /* DeckBreakdownViewController.swift */,
+				009F6FB01D04B7CD00427E91 /* FisherViewController.swift */,
+				009F6FA81D03999E00427E91 /* StatsHelper.swift */,
+			);
+			name = Decks;
 			sourceTree = "<group>";
 		};
 		00AC43D51CE925280064F3D2 = {
 			isa = PBXGroup;
 			children = (
+				009F6F8B1D03735500427E91 /* Charts.xcodeproj */,
 				00AC43F31CE92FC50064F3D2 /* MapKit.framework */,
 				00AC43E01CE925280064F3D2 /* MTGDeck */,
 				00AC43DF1CE925280064F3D2 /* Products */,
@@ -175,9 +290,10 @@
 				001EE46E1CF644C5000CA03E /* SimpleListDataSource.swift */,
 				001EE43E1CF26B14000CA03E /* CardCell.swift */,
 				00AA565C1CF0F2E00035AA1C /* DataManager.swift */,
+				009F6F9F1D03741500427E91 /* ChartCells */,
+				002132BB1CFE0F6D007F71CF /* FNMFinder */,
 				001EE4701CF65D1E000CA03E /* Cards */,
-				001EE46A1CF609C4000CA03E /* DeckViewController.swift */,
-				001EE4891CF7840A000CA03E /* DeckDetailViewController.swift */,
+				009F6FA21D0374D100427E91 /* Decks */,
 				00AC43E51CE925280064F3D2 /* Main.storyboard */,
 				001EE4361CF0FC2A000CA03E /* MTGDeck.xcdatamodeld */,
 				00AC43E81CE925280064F3D2 /* Assets.xcassets */,
@@ -198,10 +314,12 @@
 				00AC43DA1CE925280064F3D2 /* Sources */,
 				00AC43DB1CE925280064F3D2 /* Frameworks */,
 				00AC43DC1CE925280064F3D2 /* Resources */,
+				009F6F9E1D03737000427E91 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				009F6F9D1D03737000427E91 /* PBXTargetDependency */,
 			);
 			name = MTGDeck;
 			productName = MTGDeck;
@@ -234,12 +352,49 @@
 			mainGroup = 00AC43D51CE925280064F3D2;
 			productRefGroup = 00AC43DF1CE925280064F3D2 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 009F6F8C1D03735500427E91 /* Products */;
+					ProjectRef = 009F6F8B1D03735500427E91 /* Charts.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				00AC43DD1CE925280064F3D2 /* MTGDeck */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		009F6F931D03735600427E91 /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 009F6F921D03735600427E91 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		009F6F951D03735600427E91 /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 009F6F941D03735600427E91 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		009F6F971D03735600427E91 /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 009F6F961D03735600427E91 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		009F6F991D03735600427E91 /* ChartsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ChartsTests.xctest;
+			remoteRef = 009F6F981D03735600427E91 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00AC43DC1CE925280064F3D2 /* Resources */ = {
@@ -269,13 +424,20 @@
 				001EE4921CF7A692000CA03E /* MTGCardInDeck.swift in Sources */,
 				001EE42E1CF0F453000CA03E /* MTGColor+CoreDataProperties.m in Sources */,
 				001EE4911CF7A692000CA03E /* MTGCardInDeck+CoreDataProperties.swift in Sources */,
+				009F6FA41D0374F800427E91 /* DeckBreakdownViewController.swift in Sources */,
 				001EE4241CF0F453000CA03E /* MTGCard+CoreDataProperties.swift in Sources */,
+				009F6FA11D03744200427E91 /* ManaDistributionCell.swift in Sources */,
 				001EE4281CF0F453000CA03E /* MTGArtist+CoreDataProperties.m in Sources */,
+				009F6FAF1D04918700427E91 /* OCRPreviewController.swift in Sources */,
+				009F6FAD1D03D77C00427E91 /* ImageSearchOperation.swift in Sources */,
 				00AA565D1CF0F2E00035AA1C /* DataManager.swift in Sources */,
 				001EE48E1CF7A4E1000CA03E /* MTGDeck.swift in Sources */,
 				001EE4291CF0F453000CA03E /* MTGArtist.m in Sources */,
 				001EE4311CF0F453000CA03E /* MTGRarity.m in Sources */,
 				001EE4251CF0F453000CA03E /* MTGCard.swift in Sources */,
+				002132BD1CFE0F91007F71CF /* FNMFinder.swift in Sources */,
+				009F6FB11D04B7CD00427E91 /* FisherViewController.swift in Sources */,
+				009F6FAB1D039AA400427E91 /* ManaCurveCell.swift in Sources */,
 				001EE46D1CF60A7E000CA03E /* CollectionViewController.swift in Sources */,
 				001EE42A1CF0F453000CA03E /* MTGSet+CoreDataProperties.m in Sources */,
 				001EE4691CF52226000CA03E /* CardDetailViewController.swift in Sources */,
@@ -284,6 +446,7 @@
 				00AC43E21CE925280064F3D2 /* AppDelegate.swift in Sources */,
 				001EE43F1CF26B14000CA03E /* CardCell.swift in Sources */,
 				001EE43D1CF26369000CA03E /* CardArtDownloader.swift in Sources */,
+				009F6FA91D03999E00427E91 /* StatsHelper.swift in Sources */,
 				001EE42F1CF0F453000CA03E /* MTGColor.m in Sources */,
 				001EE46F1CF644C5000CA03E /* SimpleListDataSource.swift in Sources */,
 				001EE42B1CF0F453000CA03E /* MTGSet.m in Sources */,
@@ -292,6 +455,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		009F6F9D1D03737000427E91 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Charts-iOS";
+			targetProxy = 009F6F9C1D03737000427E91 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		00AC43E51CE925280064F3D2 /* Main.storyboard */ = {
@@ -403,6 +574,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = MTGDeck/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mrc.MTGDeck;
@@ -417,6 +589,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = MTGDeck/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mrc.MTGDeck;

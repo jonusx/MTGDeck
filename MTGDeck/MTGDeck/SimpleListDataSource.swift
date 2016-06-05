@@ -131,6 +131,11 @@ public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManaged
         tableView?.reloadData()
     }
     
+    func reload(items:[T]) {
+        self.items = items
+        tableView?.reloadData()
+    }
+    
     func loadImage(image:UIImage, atIndexPath indexPath:NSIndexPath, tableView:UITableView) {
         NSOperationQueue.mainQueue().addOperationWithBlock {
             guard let cell = tableView.cellForRowAtIndexPath(indexPath) as? CardCell else { return }

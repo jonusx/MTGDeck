@@ -27,9 +27,12 @@ class CollectionViewController: UIViewController {
         
         definesPresentationContext = true
         resultsTable?.tableHeaderView = searchController.searchBar
-        resultsTable?.reloadData()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        cardDataSource?.reload()
+    }
 }
 
 extension CollectionViewController: UITableViewDelegate {

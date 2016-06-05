@@ -9,9 +9,62 @@
 import Foundation
 import CoreData
 
+struct ColorBreakdown {
+    let red:Double
+    let green:Double
+    let blue:Double
+    let white:Double
+    let black:Double
+    let colorless:Double
+    init?(deck:MTGDeck) {
+        guard let cards = deck.cards as? Set<MTGCardInDeck> else { return nil }
+        var red = 0.0
+        var green = 0.0
+        var blue = 0.0
+        var white = 0.0
+        var black = 0.0
+        var colorless = 0.0
+        for cardInDeck in cards {
+            let card = cardInDeck.card!
+            red += card.manaCostRed as! Double * (cardInDeck.count as! Double)
+            white += card.manaCostWhite as! Double * (cardInDeck.count as! Double)
+            green += card.manaCostGreen as! Double * (cardInDeck.count as! Double)
+            blue += card.manaCostBlue as! Double * (cardInDeck.count as! Double)
+            black += card.manaCostBlack as! Double * (cardInDeck.count as! Double)
+            colorless += card.manaCostColorless as! Double * (cardInDeck.count as! Double)
+        }
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.white = white
+        self.black = black
+        self.colorless = colorless
+    }
+    func totalMana() -> Double {
+        return red + green + blue + black + white + colorless
+    }
+}
+
+struct CurveBreakDown {
+    private var histogram:NSCountedSet = NSCountedSet()
+    let maxCost:Int
+    init?(deck:MTGDeck) {
+        guard let cards = deck.cards as? Set<MTGCardInDeck> else { return nil }
+        var maxCost = 0
+        for cardInDeck in cards {
+            let cost = cardInDeck.card!.convertedManaCost as! Int
+            maxCost = max(maxCost, cost)
+            for _ in 0..<(cardInDeck.count! as Int) { histogram.addObject(cost) }
+        }
+        self.maxCost = maxCost
+    }
+    subscript(index:Int) -> Int {
+        get { return histogram.countForObject(index) }
+    }
+}
+
 @objc(MTGDeck)
 class MTGDeck: NSManagedObject {
-
-// Insert code here to add functionality to your managed object subclass
-
+    lazy var colorBreakDown:ColorBreakdown? = ColorBreakdown(deck:self)
+    lazy var curveBreakDown:CurveBreakDown? = CurveBreakDown(deck: self)
 }

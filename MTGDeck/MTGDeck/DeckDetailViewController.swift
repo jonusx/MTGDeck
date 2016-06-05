@@ -26,6 +26,16 @@ class DeckDetailViewController: UIViewController {
         title = deck?.title
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    @IBAction func fish() {
+        guard let controller = storyboard?.instantiateViewControllerWithIdentifier("FisherViewController") as? FisherViewController else { return }
+        controller.deck = deck
+        showViewController(controller, sender: self)
+    }
+    
     @IBAction func addCard() {
         guard let controller = storyboard?.instantiateViewControllerWithIdentifier("CardSearchViewController") as? CardSearchViewController else { return }
         controller.delegate = self
@@ -33,7 +43,6 @@ class DeckDetailViewController: UIViewController {
         let close = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(drop))
         controller.navigationItem.leftBarButtonItem = close
         showDetailViewController(navController, sender: self)
-        
     }
     
     func drop() {
@@ -44,12 +53,20 @@ class DeckDetailViewController: UIViewController {
         if let cards = deck?.cards as? Set<MTGCardInDeck>, currentCard = cards.filter({ $0.card?.multiverseid == card.multiverseid }).first {
             currentCard.count = currentCard.count as! Int + count
         }
-        let newCard = NSEntityDescription.insertNewObjectForEntityForName("MTGCardInDeck", inManagedObjectContext: DataManager.sharedManager.managedObjectContext) as! MTGCardInDeck
-        newCard.card = card
-        newCard.count = count
-        newCard.deck = deck
+        else
+        {
+            let newCard = NSEntityDescription.insertNewObjectForEntityForName("MTGCardInDeck", inManagedObjectContext: DataManager.sharedManager.managedObjectContext) as! MTGCardInDeck
+            newCard.card = card
+            newCard.count = count
+            newCard.deck = deck
+        }
         try! DataManager.sharedManager.managedObjectContext.save()
         cardDataSource?.reload()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        guard let controller = segue.destinationViewController as? DeckBreakdownViewController else { return }
+        controller.deck = deck
     }
     
 }
@@ -98,6 +115,7 @@ extension DeckDetailViewController: SimpleListDataSourceDelegate {
         get {
             let fetchRequest:NSFetchRequest = NSFetchRequest(entityName: "MTGCardInDeck")
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "card.name", ascending: true)]
+            
             let predicate = NSPredicate(format: "deck == %@", deck!)    
             fetchRequest.predicate = predicate
             return fetchRequest

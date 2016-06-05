@@ -16,6 +16,7 @@ class CardSearchViewController: UIViewController {
     let searchController:UISearchController = UISearchController(searchResultsController: nil)
     private var cards:[MTGCard] = []
     private var searchText:String?
+    private var searchTokens:Set<String>?
     var delegate:CardSearchViewControllerDelegate?
     
     @IBOutlet weak var resultsTable:UITableView?
@@ -29,11 +30,14 @@ class CardSearchViewController: UIViewController {
         cardDataSource?.tableView = resultsTable
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
+        searchController.searchBar.showsBookmarkButton = true
+        searchController.searchBar.setImage(UIImage(named: "camIcon"), forSearchBarIcon: .Bookmark, state: .Normal)
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         resultsTable?.tableHeaderView = searchController.searchBar
         resultsTable?.reloadData()
     }
+    
 
 }
 
@@ -60,7 +64,12 @@ extension CardSearchViewController: SimpleListDataSourceDelegate {
         get {
             let fetchRequest:NSFetchRequest = NSFetchRequest(entityName: "MTGCard")
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-            if let searchText = searchText {
+            if let searchTokens = searchTokens {
+                let predicates = searchTokens.map({ NSPredicate(format: "name CONTAINS[cd] %@", $0)})
+                fetchRequest.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+                return fetchRequest
+            }
+            if let searchText = searchText where searchText.isEmpty == false {
                 fetchRequest.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchText)
             }
             return fetchRequest
@@ -71,7 +80,28 @@ extension CardSearchViewController: SimpleListDataSourceDelegate {
 extension CardSearchViewController: UISearchBarDelegate {
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchText = nil
+        searchTokens = nil
         cardDataSource?.reload()
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        searchTokens = nil
+    }
+    
+    func searchBarBookmarkButtonClicked(searchBar: UISearchBar) {
+        let controller = storyboard?.instantiateViewControllerWithIdentifier("OCRPreviewController") as! OCRPreviewController
+        controller.delegate = self
+        let navController = UINavigationController(rootViewController: controller)
+        showDetailViewController(navController, sender: self)
+    }
+}
+
+extension CardSearchViewController: OCRResultsDelegate {
+    func ORCController(controller: OCRPreviewController?, didProduceAnnotations annotations: [Annotation]?) {
+        guard let annotations = annotations, completeAnnotation = annotations.first else { return }
+        let tokenArray:[String] = completeAnnotation.text.characters.split("\n").map({String($0)})
+        searchTokens = Set<String>(tokenArray)
+        searchController.searchBar.text = searchTokens?.joinWithSeparator(", ")
     }
 }
 
