@@ -28,5 +28,42 @@ class MTGCard: NSManagedObject {
         super.willSave()
     }
     
-    
+    func toDictionary() -> NSDictionary {
+        var dictionary:[NSObject : AnyObject] = [:]
+        dictionary["name"] = name
+        dictionary["manaCost"] = manaCostString
+        dictionary["type"] = type
+        dictionary["rarity"] = rarity?.rarity!
+        dictionary["text"] = text
+        dictionary["flavor"] = flavor
+        dictionary["artist"] = artist?.name!
+        dictionary["number"] = String(number)
+        dictionary["power"] = power ?? "0"
+        dictionary["toughness"] = toughness ?? "0"
+        dictionary["multiverseid"] = String(multiverseid ?? 0)
+        dictionary["imageName"] = imageName
+        dictionary["id"] = cardID
+        dictionary["loyalty"] = String(loyalty ?? 0)
+        
+        if let superTypes = superTypes as? Set<MTGType> {
+            let types:[String] = superTypes.map({ $0.type! })
+            dictionary["supertypes"] = types
+        }
+        
+        if let types = types as? Set<MTGType> {
+            let types:[String] = types.map({ $0.type! })
+            dictionary["types"] = types
+        }
+        
+        if let subtypes = subTypes as? Set<MTGType> {
+            let types:[String] = subtypes.map({ $0.type! })
+            dictionary["subtypes"] = types
+        }
+        
+        if let colors = colors as? Set<MTGColor> {
+            let colors:[String] = colors.map({ $0.color! })
+            dictionary["colors"] = colors
+        }
+        return dictionary as NSDictionary
+    }
 }

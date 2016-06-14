@@ -36,8 +36,22 @@ class CardSearchViewController: UIViewController {
         definesPresentationContext = true
         resultsTable?.tableHeaderView = searchController.searchBar
         resultsTable?.reloadData()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardShown(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardShown(_:)), name: UIKeyboardWillHideNotification, object: nil)
+
     }
     
+    func keyboardShown(notification:NSNotification) {
+        let keyboardEndFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+  
+        let oldInset = resultsTable!.contentInset
+        resultsTable?.contentInset = UIEdgeInsets(top: oldInset.top, left: oldInset.left, bottom: keyboardEndFrame.height, right: oldInset.right)
+        
+    }
+    func keyboardHidden(notification:NSNotification) {
+        let oldInset = resultsTable!.contentInset
+        resultsTable?.contentInset = UIEdgeInsets(top: oldInset.top, left: oldInset.left, bottom: 0.0, right: oldInset.right)
+    }
 
 }
 
@@ -75,6 +89,7 @@ extension CardSearchViewController: SimpleListDataSourceDelegate {
             return fetchRequest
         }
     }
+    func deletedItemAtIndexPath(indexPath: NSIndexPath) { }
 }
 
 extension CardSearchViewController: UISearchBarDelegate {

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>application-identifier</key>
+	<string>ZUW57S6CYF.com.hulu.plus</string>
+	<key>aps-environment</key>
+	<string>production</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:*.hulu.com</string>
+	</array>
+	<key>com.apple.developer.team-identifier</key>
+	<string>NRWTA23RPA</string>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.hulu.plus</string>
+	</array>
+	<key>com.apple.smoot.subscriptionservice</key>
+	<true/>
+	<key>get-task-allow</key>
+	<false/>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>ZUW57S6CYF.com.hulu.plus</string>
+	</array>
+</dict>
+</plist>

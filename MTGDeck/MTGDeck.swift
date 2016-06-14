@@ -9,7 +9,11 @@
 import Foundation
 import CoreData
 
+typealias ColorMap = (red:Int, white:Int, black:Int, green:Int, blue:Int)
 struct ColorBreakdown {
+    enum breakdownColor {
+        case Red, White, Green, Blue, Black
+    }
     let red:Double
     let green:Double
     let blue:Double
@@ -43,6 +47,10 @@ struct ColorBreakdown {
     func totalMana() -> Double {
         return red + green + blue + black + white + colorless
     }
+    
+    var colors:ColorMap {
+        return ColorMap(Int(red), Int(white), Int(black), Int(green), Int(blue))
+    }
 }
 
 struct CurveBreakDown {
@@ -67,4 +75,10 @@ struct CurveBreakDown {
 class MTGDeck: NSManagedObject {
     lazy var colorBreakDown:ColorBreakdown? = ColorBreakdown(deck:self)
     lazy var curveBreakDown:CurveBreakDown? = CurveBreakDown(deck: self)
+    
+    override func didSave() {
+        super.didSave()
+        colorBreakDown = ColorBreakdown(deck: self)
+        curveBreakDown = CurveBreakDown(deck: self)
+    }
 }

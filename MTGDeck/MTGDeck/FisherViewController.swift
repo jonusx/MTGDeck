@@ -41,6 +41,7 @@ class Fisher {
 class FisherViewController: UIViewController {
     var deck:MTGDeck? {
         didSet {
+            self.title = deck?.title
             var allCards:[MTGCard] = []
             for cardInDeck in deck!.cards! {
                 let cardInDeck = cardInDeck as! MTGCardInDeck
@@ -60,7 +61,7 @@ class FisherViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardDataSource = SimpleListDataSource(context: DataManager.sharedManager.managedObjectContext)
+        cardDataSource = SimpleListDataSource(context: DataManager.sharedManager.personalContext)
         cardDataSource?.tableView = cardTable
         cardTable?.reloadData()
         

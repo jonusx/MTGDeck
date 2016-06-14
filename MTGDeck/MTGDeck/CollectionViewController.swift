@@ -18,7 +18,7 @@ class CollectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardDataSource = SimpleListDataSource(context: DataManager.sharedManager.managedObjectContext)
+        cardDataSource = SimpleListDataSource(context: DataManager.sharedManager.personalContext)
         cardDataSource?.delegate = self
         cardDataSource?.tableView = resultsTable
         searchController.searchResultsUpdater = self
@@ -59,6 +59,8 @@ extension CollectionViewController: SimpleListDataSourceDelegate {
             return fetchRequest
         }
     }
+    
+    func deletedItemAtIndexPath(indexPath: NSIndexPath) { }
 }
 
 extension CollectionViewController: UISearchBarDelegate {}

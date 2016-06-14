@@ -34,6 +34,8 @@
 		001EE4911CF7A692000CA03E /* MTGCardInDeck+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001EE48F1CF7A692000CA03E /* MTGCardInDeck+CoreDataProperties.swift */; };
 		001EE4921CF7A692000CA03E /* MTGCardInDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001EE4901CF7A692000CA03E /* MTGCardInDeck.swift */; };
 		002132BD1CFE0F91007F71CF /* FNMFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002132BC1CFE0F91007F71CF /* FNMFinder.swift */; };
+		007EA1F71D0E2C5900932A1F /* CardAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007EA1F61D0E2C5900932A1F /* CardAnimationController.swift */; };
+		007EA1F91D0E33C700932A1F /* CardTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007EA1F81D0E33C700932A1F /* CardTabBarController.swift */; };
 		009F6F9A1D03737000427E91 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009F6F931D03735600427E91 /* Charts.framework */; };
 		009F6F9B1D03737000427E91 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 009F6F931D03735600427E91 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		009F6FA11D03744200427E91 /* ManaDistributionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F6FA01D03744200427E91 /* ManaDistributionCell.swift */; };
@@ -45,7 +47,6 @@
 		009F6FB11D04B7CD00427E91 /* FisherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F6FB01D04B7CD00427E91 /* FisherViewController.swift */; };
 		00AA565D1CF0F2E00035AA1C /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA565C1CF0F2E00035AA1C /* DataManager.swift */; };
 		00AC43E21CE925280064F3D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AC43E11CE925280064F3D2 /* AppDelegate.swift */; };
-		00AC43E41CE925280064F3D2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AC43E31CE925280064F3D2 /* ViewController.swift */; };
 		00AC43E71CE925280064F3D2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00AC43E51CE925280064F3D2 /* Main.storyboard */; };
 		00AC43E91CE925280064F3D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00AC43E81CE925280064F3D2 /* Assets.xcassets */; };
 		00AC43EC1CE925280064F3D2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00AC43EA1CE925280064F3D2 /* LaunchScreen.storyboard */; };
@@ -105,6 +106,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00147DC71D087EE8002288CA /* MTGDeck.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MTGDeck.entitlements; sourceTree = "<group>"; };
 		001EE40B1CF0F453000CA03E /* MTGDeck-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MTGDeck-Bridging-Header.h"; sourceTree = "<group>"; };
 		001EE40C1CF0F453000CA03E /* MTGCard+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MTGCard+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		001EE40D1CF0F453000CA03E /* MTGCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MTGCard.swift; sourceTree = "<group>"; };
@@ -144,6 +146,8 @@
 		001EE48F1CF7A692000CA03E /* MTGCardInDeck+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "MTGCardInDeck+CoreDataProperties.swift"; path = "../MTGCardInDeck+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		001EE4901CF7A692000CA03E /* MTGCardInDeck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MTGCardInDeck.swift; path = ../MTGCardInDeck.swift; sourceTree = "<group>"; };
 		002132BC1CFE0F91007F71CF /* FNMFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FNMFinder.swift; sourceTree = "<group>"; };
+		007EA1F61D0E2C5900932A1F /* CardAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardAnimationController.swift; sourceTree = "<group>"; };
+		007EA1F81D0E33C700932A1F /* CardTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTabBarController.swift; sourceTree = "<group>"; };
 		009F6F8B1D03735500427E91 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = ../Charts/Charts/Charts.xcodeproj; sourceTree = "<group>"; };
 		009F6FA01D03744200427E91 /* ManaDistributionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManaDistributionCell.swift; sourceTree = "<group>"; };
 		009F6FA31D0374F800427E91 /* DeckBreakdownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeckBreakdownViewController.swift; sourceTree = "<group>"; };
@@ -155,7 +159,6 @@
 		00AA565C1CF0F2E00035AA1C /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		00AC43DE1CE925280064F3D2 /* MTGDeck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MTGDeck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00AC43E11CE925280064F3D2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		00AC43E31CE925280064F3D2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		00AC43E61CE925280064F3D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		00AC43E81CE925280064F3D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00AC43EB1CE925280064F3D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -203,8 +206,8 @@
 				001EE41F1CF0F453000CA03E /* MTGColor.m */,
 				001EE4201CF0F453000CA03E /* MTGRarity+CoreDataProperties.h */,
 				001EE4211CF0F453000CA03E /* MTGRarity+CoreDataProperties.m */,
-				001EE4221CF0F453000CA03E /* MTGRarity.h */,
 				001EE4231CF0F453000CA03E /* MTGRarity.m */,
+				001EE4221CF0F453000CA03E /* MTGRarity.h */,
 			);
 			name = "Managed Objects";
 			sourceTree = "<group>";
@@ -283,13 +286,15 @@
 		00AC43E01CE925280064F3D2 /* MTGDeck */ = {
 			isa = PBXGroup;
 			children = (
+				00147DC71D087EE8002288CA /* MTGDeck.entitlements */,
 				001EE4331CF0F52E000CA03E /* StoredData.sqlite */,
 				001EE4321CF0F465000CA03E /* Managed Objects */,
 				00AC43E11CE925280064F3D2 /* AppDelegate.swift */,
-				00AC43E31CE925280064F3D2 /* ViewController.swift */,
-				001EE46E1CF644C5000CA03E /* SimpleListDataSource.swift */,
 				001EE43E1CF26B14000CA03E /* CardCell.swift */,
+				001EE46E1CF644C5000CA03E /* SimpleListDataSource.swift */,
 				00AA565C1CF0F2E00035AA1C /* DataManager.swift */,
+				007EA1F61D0E2C5900932A1F /* CardAnimationController.swift */,
+				007EA1F81D0E33C700932A1F /* CardTabBarController.swift */,
 				009F6F9F1D03741500427E91 /* ChartCells */,
 				002132BB1CFE0F6D007F71CF /* FNMFinder */,
 				001EE4701CF65D1E000CA03E /* Cards */,
@@ -338,6 +343,12 @@
 				TargetAttributes = {
 					00AC43DD1CE925280064F3D2 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = Z6FZL5UWKR;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -418,8 +429,8 @@
 				001EE43B1CF18B45000CA03E /* CardSearchViewController.swift in Sources */,
 				001EE42D1CF0F453000CA03E /* MTGType.m in Sources */,
 				001EE4391CF0FC2A000CA03E /* MTGDeck.xcdatamodeld in Sources */,
-				00AC43E41CE925280064F3D2 /* ViewController.swift in Sources */,
 				001EE42C1CF0F453000CA03E /* MTGType+CoreDataProperties.m in Sources */,
+				007EA1F91D0E33C700932A1F /* CardTabBarController.swift in Sources */,
 				001EE48A1CF7840A000CA03E /* DeckDetailViewController.swift in Sources */,
 				001EE4921CF7A692000CA03E /* MTGCardInDeck.swift in Sources */,
 				001EE42E1CF0F453000CA03E /* MTGColor+CoreDataProperties.m in Sources */,
@@ -442,6 +453,7 @@
 				001EE42A1CF0F453000CA03E /* MTGSet+CoreDataProperties.m in Sources */,
 				001EE4691CF52226000CA03E /* CardDetailViewController.swift in Sources */,
 				001EE48D1CF7A4E1000CA03E /* MTGDeck+CoreDataProperties.swift in Sources */,
+				007EA1F71D0E2C5900932A1F /* CardAnimationController.swift in Sources */,
 				001EE46B1CF609C4000CA03E /* DeckViewController.swift in Sources */,
 				00AC43E21CE925280064F3D2 /* AppDelegate.swift in Sources */,
 				001EE43F1CF26B14000CA03E /* CardCell.swift in Sources */,
@@ -574,10 +586,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MTGDeck/MTGDeck.entitlements;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = MTGDeck/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mrc.MTGDeck;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cruzian.mtgdeck;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "MTGDeck/MTGDeck-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -589,10 +602,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MTGDeck/MTGDeck.entitlements;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = MTGDeck/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mrc.MTGDeck;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cruzian.mtgdeck;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "MTGDeck/MTGDeck-Bridging-Header.h";
 			};

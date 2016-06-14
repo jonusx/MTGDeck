@@ -8,6 +8,19 @@
 
 import UIKit
 
+class DeckCell: CardCell {
+    @IBOutlet weak var colorStack:UIStackView?
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        if let views = colorStack?.arrangedSubviews {
+            for view in views {
+                view.removeFromSuperview()
+            }
+        }
+    }
+}
+
 class DeckViewController: UIViewController {
     private var decks:[MTGDeck] = []
     @IBOutlet weak var deckTable:UITableView?
@@ -16,11 +29,13 @@ class DeckViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        deckDataSource = SimpleListDataSource(context: DataManager.sharedManager.managedObjectContext)
+        deckDataSource = SimpleListDataSource(context: DataManager.sharedManager.personalContext)
         deckDataSource?.delegate = self
         deckDataSource?.tableView = deckTable
-        
+        deckTable?.dataSource = self
         deckTable?.reloadData()
+        
+        NSNotificationCenter.defaultCenter().addObserver(deckDataSource!, selector: #selector(SimpleListDataSource<MTGDeck>.reset), name: NSManagedObjectContextDidSaveNotification, object: nil)
     }
     
     @IBAction func addNewDeck() {
@@ -31,9 +46,9 @@ class DeckViewController: UIViewController {
             titleTextField = textField
         }
         alert.addAction(UIAlertAction(title: "Add", style: .Default, handler: { (action) in
-            let newDeck = NSEntityDescription.insertNewObjectForEntityForName("MTGDeck", inManagedObjectContext: DataManager.sharedManager.managedObjectContext) as! MTGDeck
+            let newDeck = NSEntityDescription.insertNewObjectForEntityForName("MTGDeck", inManagedObjectContext: DataManager.sharedManager.personalContext) as! MTGDeck
             newDeck.title = titleTextField?.text
-            try! DataManager.sharedManager.managedObjectContext.save()
+            try! DataManager.sharedManager.personalContext.save()
             self.deckDataSource?.reload()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
@@ -48,6 +63,68 @@ extension DeckViewController: UITableViewDelegate {
         let controller = storyboard?.instantiateViewControllerWithIdentifier("DeckDetailViewController") as! DeckDetailViewController
         controller.deck = deckDataSource?.items[indexPath.row]
         showViewController(controller, sender: self)
+    }
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return .Delete
+    }
+}
+
+extension DeckViewController:UITableViewDataSource {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = deckDataSource?.tableView(tableView, cellForRowAtIndexPath: indexPath) as! DeckCell
+        if let colors = deckDataSource?.items[indexPath.row].colorBreakDown?.colors {
+            var colorsToAdd:[UIColor] = []
+            if colors.red > 0 {
+                colorsToAdd.append(UIColor.redColor())
+            }
+            if colors.white > 0 {
+                colorsToAdd.append(UIColor.whiteColor())
+            }
+            if colors.black > 0 {
+                colorsToAdd.append(UIColor.blackColor())
+            }
+            if colors.green > 0 {
+                colorsToAdd.append(UIColor.greenColor())
+            }
+            if colors.blue > 0 {
+                colorsToAdd.append(UIColor.blueColor())
+            }
+            for view:UIView in colorsToAdd.map({ (color) in
+                let v = UIView()
+                v.heightAnchor.constraintEqualToConstant(30).active = true
+                v.widthAnchor.constraintEqualToConstant(30).active = true
+                v.backgroundColor = color
+                v.layer.borderColor = UIColor.blackColor().CGColor
+                v.layer.borderWidth = 1.0
+                return v
+            }) {
+                cell.colorStack?.addArrangedSubview(view)
+            }
+            
+        }
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return deckDataSource!.tableView(tableView, numberOfRowsInSection: section)
+    }
+    
+    
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            if let itemToRemove = deckDataSource?.items[indexPath.row] {
+                deckDataSource?.context.deleteObject(itemToRemove)
+                try! deckDataSource?.context.save()
+                deckDataSource?.reload()
+            }
+        }
     }
 }
 

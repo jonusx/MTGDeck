@@ -17,7 +17,7 @@ class DeckDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardDataSource = SimpleListDataSource(context: DataManager.sharedManager.managedObjectContext)
+        cardDataSource = SimpleListDataSource(context: DataManager.sharedManager.personalContext)
         cardDataSource?.tableView = cardTable
         cardDataSource?.delegate = self
         cardTable?.dataSource = self
@@ -55,12 +55,14 @@ class DeckDetailViewController: UIViewController {
         }
         else
         {
-            let newCard = NSEntityDescription.insertNewObjectForEntityForName("MTGCardInDeck", inManagedObjectContext: DataManager.sharedManager.managedObjectContext) as! MTGCardInDeck
-            newCard.card = card
+            let dict = card.toDictionary()
+            let transferredCard = DataManager.sharedManager.parseCard(dict, intoContext: DataManager.sharedManager.personalContext)!
+            let newCard = NSEntityDescription.insertNewObjectForEntityForName("MTGCardInDeck", inManagedObjectContext: DataManager.sharedManager.personalContext) as! MTGCardInDeck
+            newCard.card = transferredCard
             newCard.count = count
             newCard.deck = deck
         }
-        try! DataManager.sharedManager.managedObjectContext.save()
+        try! DataManager.sharedManager.personalContext.save()
         cardDataSource?.reload()
     }
     
@@ -98,6 +100,21 @@ extension DeckDetailViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cardDataSource!.tableView(tableView, numberOfRowsInSection: section)
     }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            if let itemToRemove = cardDataSource?.items[indexPath.row] {
+                cardDataSource?.context.deleteObject(itemToRemove)
+                try! cardDataSource?.context.save()
+                cardDataSource?.reload()
+            }
+        }
+    }
 }
 
 extension DeckDetailViewController: UITableViewDelegate {
@@ -106,6 +123,10 @@ extension DeckDetailViewController: UITableViewDelegate {
         controller.card = cardDataSource?.items[indexPath.row].card
         showViewController(controller, sender: self)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return .Delete
     }
 }
 

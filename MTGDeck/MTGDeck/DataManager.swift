@@ -10,7 +10,14 @@ import CoreData
 import UIKit
 
 class DataManager {
-    static let sharedManager = DataManager()
+    static let DataManagerDidMergeData:String = "DataManagerDidMergeData"
+    static let sharedManager = DataManager(name: "StoredData.sqlite", options: nil)
+    lazy var personalManager:DataManager = DataManager(name: "StoredPersonalData.sqlite", options: [NSPersistentStoreUbiquitousContentNameKey : "mtgdeck"], local:false)
+    var personalContext:NSManagedObjectContext {
+        return personalManager.managedObjectContext ?? managedObjectContext
+    }
+    private let storeName:String
+    private let options:[NSObject : AnyObject]?
     let artDownloader = CardArtDownloader()
     
     lazy var dateFormatter:NSDateFormatter = {
@@ -19,10 +26,30 @@ class DataManager {
         return formatter
     }()
     
-    lazy var applicationDocumentsDirectory: NSURL = {
-        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls.last!
-    }()
+    init(name:String, options:[NSObject : AnyObject]?, local:Bool = true) {
+        storeName = name
+        self.options = options
+        if local == false {
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(DataManager.resetStore), name: NSPersistentStoreCoordinatorStoresWillChangeNotification, object: managedObjectContext.persistentStoreCoordinator)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(DataManager.merge(_:)), name: NSPersistentStoreDidImportUbiquitousContentChangesNotification, object: managedObjectContext.persistentStoreCoordinator)
+
+        }
+    }
+    
+    @objc func merge(notification:NSNotification?) {
+        if let notification = notification {
+            managedObjectContext.performBlock({
+                self.managedObjectContext.mergeChangesFromContextDidSaveNotification(notification)
+                NSNotificationCenter.defaultCenter().postNotificationName(DataManager.DataManagerDidMergeData, object: nil, userInfo: nil)
+            })
+        }
+    }
+    
+    @objc func resetStore() {
+        managedObjectContext.performBlock({ self.managedObjectContext.reset() })
+    }
+    
+    lazy var applicationDocumentsDirectory: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).last!
     
     lazy var managedObjectModel: NSManagedObjectModel = {
         let modelURL = NSBundle.mainBundle().URLForResource("MTGDeck", withExtension: "momd")!
@@ -31,10 +58,10 @@ class DataManager {
     
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("StoredData.sqlite")
+        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent(self.storeName)
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
-            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
+            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: self.options)
         } catch {
             var dict = [String: AnyObject]()
             dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
@@ -114,12 +141,12 @@ extension DataManagerSetParser {
         }
     }
     
-    func parseCard(card:NSDictionary, intoContext context:NSManagedObjectContext) {
+    func parseCard(card:NSDictionary, intoContext context:NSManagedObjectContext) -> MTGCard? {
         let fetchRequest = NSFetchRequest(entityName: "MTGCard")
         fetchRequest.predicate = NSPredicate(format: "cardID == %@", argumentArray: [card["id"]!])
         let result = context.countForFetchRequest(fetchRequest, error: nil)
         if result > 1 {
-            return
+            return nil
         }
         let newCard = NSEntityDescription.insertNewObjectForEntityForName("MTGCard", inManagedObjectContext: context) as! MTGCard
         if let types = card["supertypes"] as? [String] where types.isEmpty == false {
@@ -165,6 +192,7 @@ extension DataManagerSetParser {
         if let loyaltyString = card["loyalty"] as? String {
             newCard.loyalty = Int(loyaltyString)!
         }
+        return newCard
     }
     
     func colorsFromColorArray(colors:[String], context:NSManagedObjectContext) -> [MTGColor] {

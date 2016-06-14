@@ -87,6 +87,13 @@ public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManaged
     
     init(context:NSManagedObjectContext) {
         self.context = context
+        super.init()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SimpleListDataSource.reset), name: NSPersistentStoreCoordinatorStoresWillChangeNotification, object: self.context.persistentStoreCoordinator)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SimpleListDataSource.reset), name: DataManager.DataManagerDidMergeData, object: nil)
+        
+        
     }
     
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -103,11 +110,12 @@ public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManaged
         }
         else
         {
-            if let item = item as? MTGCard {
-                DataManager.sharedManager.artDownloader.artForCard(item, completion: { (image) in
+            if let item = item as? MTGCard ?? (item as? MTGCardInDeck)?.card {
+                let completion:((UIImage?) -> ()) = { (image) in
                     guard let image = image else { return }
                     self.loadImage(image, atIndexPath: indexPath, tableView: tableView)
-                })
+                }
+                DataManager.sharedManager.artDownloader.artForCard(item, completion: completion)
             }
         }
         
@@ -123,6 +131,10 @@ public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManaged
         }
         cell.nameLabel?.text = items[indexPath.row].title
         return cell
+    }
+    
+    @objc func reset() {
+        reload()
     }
     
     func reload() {
