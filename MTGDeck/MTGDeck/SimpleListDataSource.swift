@@ -139,13 +139,16 @@ public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManaged
     
     func reload() {
         guard let delegate = delegate else { return }
-        items = try! context.executeFetchRequest(delegate.fetchRequest) as! Array<T>
-        tableView?.reloadData()
+        context.performBlock { [weak self] in
+            self?.reload(try! self?.context.executeFetchRequest(delegate.fetchRequest) as! Array<T>)
+        }
     }
     
     func reload(items:[T]) {
-        self.items = items
-        tableView?.reloadData()
+        NSOperationQueue.mainQueue().addOperationWithBlock {
+            self.items = items
+            self.tableView?.reloadData()
+        }
     }
     
     func loadImage(image:UIImage, atIndexPath indexPath:NSIndexPath, tableView:UITableView) {
