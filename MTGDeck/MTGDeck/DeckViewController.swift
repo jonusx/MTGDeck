@@ -44,8 +44,9 @@ class DeckViewController: UIViewController {
             titleTextField = textField
         }
         alert.addAction(UIAlertAction(title: "Add", style: .Default, handler: { (action) in
+            guard let text = titleTextField?.text where text.isEmpty == false else { return }
             let newDeck = NSEntityDescription.insertNewObjectForEntityForName("MTGDeck", inManagedObjectContext: DataManager.sharedManager.personalContext) as! MTGDeck
-            newDeck.title = titleTextField?.text
+            newDeck.title = text
             try! DataManager.sharedManager.personalContext.save()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
