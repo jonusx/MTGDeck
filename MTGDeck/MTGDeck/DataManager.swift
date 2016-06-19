@@ -40,7 +40,6 @@ class DataManager {
         if let notification = notification {
             managedObjectContext.performBlock({
                 self.managedObjectContext.mergeChangesFromContextDidSaveNotification(notification)
-                NSNotificationCenter.defaultCenter().postNotificationName(DataManager.DataManagerDidMergeData, object: nil, userInfo: nil)
             })
         }
     }
@@ -59,6 +58,7 @@ class DataManager {
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent(self.storeName)
+        print(url)
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
             try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: self.options)
@@ -144,9 +144,9 @@ extension DataManagerSetParser {
     func parseCard(card:NSDictionary, intoContext context:NSManagedObjectContext) -> MTGCard? {
         let fetchRequest = NSFetchRequest(entityName: "MTGCard")
         fetchRequest.predicate = NSPredicate(format: "cardID == %@", argumentArray: [card["id"]!])
-        let result = context.countForFetchRequest(fetchRequest, error: nil)
-        if result > 1 {
-            return nil
+        let result = try! context.executeFetchRequest(fetchRequest)
+        if result.count >= 1 {
+            return result.first as? MTGCard
         }
         let newCard = NSEntityDescription.insertNewObjectForEntityForName("MTGCard", inManagedObjectContext: context) as! MTGCard
         if let types = card["supertypes"] as? [String] where types.isEmpty == false {

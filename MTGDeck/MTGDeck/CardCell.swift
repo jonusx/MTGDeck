@@ -19,3 +19,14 @@ class CardCell: UITableViewCell {
         cardArtImageView?.image = nil
     }
 }
+
+class CardSearchCell: CardCell, ActionableCell {
+    var action:((UITableViewCell) -> ())?
+    override func prepareForReuse() {
+        action = nil
+    }
+    
+    @IBAction func performAction(sender:UIButton?) {
+        action?(self)
+    }
+}

@@ -8,8 +8,55 @@
 
 import UIKit
 
+struct DeckManager {
+    let deck:MTGDeck
+    
+    func presentAddCard(card:MTGCard, onViewController viewController:UIViewController) {
+        let controller = UIAlertController(title: "How many?", message: "", preferredStyle: .Alert)
+        var textField:UITextField?
+        controller.addTextFieldWithConfigurationHandler { (field) in
+            textField = field
+            field.keyboardType = .NumberPad
+            field.placeholder = "Count"
+        }
+        controller.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action) in
+            guard let text = textField?.text where text.isEmpty == false else { return }
+            self.addCard(card, count: Int(textField!.text ?? "0")!)
+            
+        }))
+        controller.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        let presenter = viewController.presentedViewController ?? viewController
+        presenter.showDetailViewController(controller, sender: nil)
+    }
+    
+    func addCard(card:MTGCard, count:Int) {
+        if let cards = deck.cards as? Set<MTGCardInDeck>, currentCard = cards.filter({ $0.card?.multiverseid == card.multiverseid }).first {
+            currentCard.count = currentCard.count as! Int + count
+        }
+        else
+        {
+            let dict = card.toDictionary()
+            let transferredCard = DataManager.sharedManager.parseCard(dict, intoContext: DataManager.sharedManager.personalContext)!
+            let newCard = NSEntityDescription.insertNewObjectForEntityForName("MTGCardInDeck", inManagedObjectContext: DataManager.sharedManager.personalContext) as! MTGCardInDeck
+            newCard.card = transferredCard
+            newCard.count = count
+            newCard.deck = deck
+        }
+        try! DataManager.sharedManager.personalContext.save()
+    }
+}
+
 class DeckDetailViewController: UIViewController {
-    var deck:MTGDeck?
+    var deck:MTGDeck? {
+        didSet {
+            guard let deck = deck else {
+                deckManager = nil
+                return
+            }
+            deckManager = DeckManager(deck: deck)
+        }
+    }
+    var deckManager:DeckManager?
     
     @IBOutlet weak var cardTable:UITableView?
     
@@ -17,7 +64,7 @@ class DeckDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardDataSource = SimpleListDataSource(context: DataManager.sharedManager.personalContext)
+        cardDataSource = SimpleListDataSource(contextUsingFetchedResultsController: DataManager.sharedManager.personalContext)
         cardDataSource?.tableView = cardTable
         cardDataSource?.delegate = self
         cardTable?.dataSource = self
@@ -50,20 +97,8 @@ class DeckDetailViewController: UIViewController {
     }
     
     func addCard(card:MTGCard, count:Int) {
-        if let cards = deck?.cards as? Set<MTGCardInDeck>, currentCard = cards.filter({ $0.card?.multiverseid == card.multiverseid }).first {
-            currentCard.count = currentCard.count as! Int + count
-        }
-        else
-        {
-            let dict = card.toDictionary()
-            let transferredCard = DataManager.sharedManager.parseCard(dict, intoContext: DataManager.sharedManager.personalContext)!
-            let newCard = NSEntityDescription.insertNewObjectForEntityForName("MTGCardInDeck", inManagedObjectContext: DataManager.sharedManager.personalContext) as! MTGCardInDeck
-            newCard.card = transferredCard
-            newCard.count = count
-            newCard.deck = deck
-        }
-        try! DataManager.sharedManager.personalContext.save()
-        cardDataSource?.reload()
+        deckManager?.addCard(card, count: count)
+//        cardDataSource?.reload()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -75,25 +110,14 @@ class DeckDetailViewController: UIViewController {
 
 extension DeckDetailViewController: CardSearchViewControllerDelegate {
     func didSelectCard(card: MTGCard) {
-        let controller = UIAlertController(title: "How many?", message: "", preferredStyle: .Alert)
-        var textField:UITextField?
-        controller.addTextFieldWithConfigurationHandler { (field) in
-            textField = field
-            field.keyboardType = .NumberPad
-            field.placeholder = "Count"
-        }
-        controller.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action) in
-            self.addCard(card, count: Int(textField!.text ?? "0")!)
-            
-        }))
-        presentedViewController?.showDetailViewController(controller, sender: self)
+        deckManager?.presentAddCard(card, onViewController: self)
     }
 }
 
 extension DeckDetailViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = cardDataSource?.tableView(tableView, cellForRowAtIndexPath: indexPath) as! CardCell
-        cell.cardTextLabel?.text = "Number in deck -- \(cardDataSource!.items[indexPath.row].count!)"
+        cell.cardTextLabel?.text = "Number in deck -- \(cardDataSource![indexPath.row]!.count!)"
         return cell
     }
     
@@ -108,10 +132,9 @@ extension DeckDetailViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            if let itemToRemove = cardDataSource?.items[indexPath.row] {
+            if let itemToRemove = cardDataSource?[indexPath.row] {
                 cardDataSource?.context.deleteObject(itemToRemove)
                 try! cardDataSource?.context.save()
-                cardDataSource?.reload()
             }
         }
     }
@@ -120,7 +143,7 @@ extension DeckDetailViewController: UITableViewDataSource {
 extension DeckDetailViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let controller = storyboard?.instantiateViewControllerWithIdentifier("CardDetailViewController") as! CardDetailViewController
-        controller.card = cardDataSource?.items[indexPath.row].card
+        controller.card = cardDataSource?[indexPath.row]!.card
         showViewController(controller, sender: self)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }

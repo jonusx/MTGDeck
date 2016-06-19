@@ -17,6 +17,7 @@ class CardSearchViewController: UIViewController {
     private var cards:[MTGCard] = []
     private var searchText:String?
     private var searchTokens:Set<String>?
+    var deck:MTGDeck?
     var delegate:CardSearchViewControllerDelegate?
     
     @IBOutlet weak var resultsTable:UITableView?
@@ -25,9 +26,19 @@ class CardSearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardDataSource = SimpleListDataSource(context: DataManager.sharedManager.managedObjectContext)
+        cardDataSource = SimpleListDataSource(contextUsingFetchedResultsController: DataManager.sharedManager.managedObjectContext)
         cardDataSource?.delegate = self
         cardDataSource?.tableView = resultsTable
+        cardDataSource?.actionBlock = { [weak self] (item) in
+            if let delegate = self?.delegate {
+                delegate.didSelectCard(item)
+            }
+            else
+            {
+                self?.addCard(item)
+            }
+        }
+        
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.searchBar.showsBookmarkButton = true
@@ -48,22 +59,42 @@ class CardSearchViewController: UIViewController {
         resultsTable?.contentInset = UIEdgeInsets(top: oldInset.top, left: oldInset.left, bottom: keyboardEndFrame.height, right: oldInset.right)
         
     }
+    
     func keyboardHidden(notification:NSNotification) {
         let oldInset = resultsTable!.contentInset
         resultsTable?.contentInset = UIEdgeInsets(top: oldInset.top, left: oldInset.left, bottom: 0.0, right: oldInset.right)
     }
 
+    func addCard(card:MTGCard) {
+        
+        DataManager.sharedManager.personalContext.performBlock { 
+            
+            let fetchRequest:NSFetchRequest = NSFetchRequest(entityName: "MTGDeck")
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+            let decks = try! DataManager.sharedManager.personalContext.executeFetchRequest(fetchRequest) as! [MTGDeck]
+
+            NSOperationQueue.mainQueue().addOperationWithBlock({
+                
+                let presenter = self.presentedViewController ?? self
+                let controller = UIAlertController(title: "Select Deck to add to:", message: "", preferredStyle: .ActionSheet)
+                for deck in decks {
+                    controller.addAction(UIAlertAction(title: deck.title, style: .Default, handler: { (action) in
+                        let deckManager = DeckManager(deck: deck)
+                        deckManager.presentAddCard(card, onViewController: self)
+                    }))
+                }
+                controller.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                presenter.showDetailViewController(controller, sender: nil)
+            })
+        }
+    }
 }
 
 extension CardSearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if let delegate = delegate {
-            delegate.didSelectCard(cardDataSource!.items[indexPath.row])
-            return
-        }
         let controller = storyboard?.instantiateViewControllerWithIdentifier("CardDetailViewController") as! CardDetailViewController
-        controller.card = cardDataSource?.items[indexPath.row]
+        controller.card = cardDataSource?[indexPath.row]
         showViewController(controller, sender: self)
     }
 }
@@ -96,6 +127,7 @@ extension CardSearchViewController: UISearchBarDelegate {
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchText = nil
         searchTokens = nil
+        cardDataSource?.isUsingFRC = true
         cardDataSource?.reload()
     }
     

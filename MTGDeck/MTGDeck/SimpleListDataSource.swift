@@ -20,6 +20,10 @@ public protocol SimpleListDisplayable {
     var image:UIImage? { get set }
 }
 
+public protocol ActionableCell {
+    var action:((UITableViewCell) -> ())? { get set }
+}
+
 extension MTGCard: SimpleListDisplayable {
     var title: String? {
         get { return name }
@@ -71,13 +75,35 @@ extension MTGDeck: SimpleListDisplayable {
     var image: UIImage? { get { return nil } set {} }
 }
 
-public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManagedObject>: NSObject, UITableViewDataSource {
-    private(set) var items:[T] = []
+public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManagedObject>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
+    var actionBlock:((T) -> ())?
+    private var items:[T] = []
+    subscript(index:Int) -> T? {
+        get {
+            if isUsingFRC {
+                return fetchedResultsController?.objectAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as? T
+            }
+            return items[index]
+        }
+    }
+    var objectCount:Int {
+        return tableView(tableView!, numberOfRowsInSection: 0)
+    }
+    
     var delegate:SimpleListDataSourceDelegate? {
         didSet {
             reload()
         }
     }
+    
+    var fetchedResultsController:NSFetchedResultsController?
+    
+    var isUsingFRC:Bool = false {
+        didSet {
+            reload()
+        }
+    }
+    
     let context:NSManagedObjectContext
     weak var tableView:UITableView? {
         didSet {
@@ -96,15 +122,28 @@ public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManaged
         
     }
     
+    convenience init(contextUsingFetchedResultsController context:NSManagedObjectContext) {
+        self.init(context: context)
+        self.isUsingFRC = true
+    }
+    
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+        guard let fetchedResultsController = fetchedResultsController,
+            sections = fetchedResultsController.sections where isUsingFRC == true else {
+            return items.count
+        }
+        return sections[section].numberOfObjects ?? 0
     }
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cardCell", forIndexPath: indexPath) as! CardCell
-        let item = items[indexPath.row]
+        let item:T = self[indexPath.row]!
+
         let itemName = item.title ?? "" as NSString
-        
+        if let actionBlock = actionBlock where cell is ActionableCell == true {
+            var actionCell = cell as! ActionableCell
+            actionCell.action = { (cell) in actionBlock(item) }
+        }
         if let art = item.image {
             cell.cardArtImageView?.image = art
         }
@@ -129,7 +168,7 @@ public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManaged
             cell.nameLabel?.attributedText = attributedString
             return cell
         }
-        cell.nameLabel?.text = items[indexPath.row].title
+        cell.nameLabel?.text = item.title
         return cell
     }
     
@@ -140,7 +179,26 @@ public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManaged
     func reload() {
         guard let delegate = delegate else { return }
         context.performBlock { [weak self] in
-            self?.reload(try! self?.context.executeFetchRequest(delegate.fetchRequest) as! Array<T>)
+            guard let strongSelf = self else { return }
+            if strongSelf.isUsingFRC {
+                let fetchRequest = delegate.fetchRequest
+                fetchRequest.fetchBatchSize = 20
+                strongSelf.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: strongSelf.context, sectionNameKeyPath: nil, cacheName: nil)
+                strongSelf.fetchedResultsController?.delegate = self
+                
+                do {
+                    try strongSelf.fetchedResultsController?.performFetch()
+                } catch {
+                    print("An error occurred")
+                }
+                strongSelf.tableView?.reloadData()
+            }
+            else
+            {
+                strongSelf.fetchedResultsController = nil
+                delegate.fetchRequest.fetchBatchSize = 0
+                strongSelf.reload(try! strongSelf.context.executeFetchRequest(delegate.fetchRequest) as! Array<T>)
+            }
         }
     }
     
@@ -155,9 +213,29 @@ public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManaged
         NSOperationQueue.mainQueue().addOperationWithBlock {
             guard let cell = tableView.cellForRowAtIndexPath(indexPath) as? CardCell else { return }
             cell.cardArtImageView?.image = image
-            self.items[indexPath.row].image = image
+            var item = self[indexPath.row]!
+            item.image = image
         }
     }
     
+    public func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        switch type {
+        case .Delete:
+            tableView?.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        case .Insert:
+            tableView?.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        case .Move:
+            tableView?.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
+        case .Update:
+            tableView?.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        }
+    }
     
+    public func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        tableView?.beginUpdates()
+    }
+    
+    public func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        tableView?.endUpdates()
+    }
 }

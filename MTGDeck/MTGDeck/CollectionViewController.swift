@@ -8,6 +8,10 @@
 
 import UIKit
 
+class CollectionCell: CardCell {
+    
+}
+
 class CollectionViewController: UIViewController {
     let searchController:UISearchController = UISearchController(searchResultsController: nil)
     private var cards:[MTGCard] = []
@@ -18,9 +22,10 @@ class CollectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardDataSource = SimpleListDataSource(context: DataManager.sharedManager.personalContext)
+        cardDataSource = SimpleListDataSource(contextUsingFetchedResultsController: DataManager.sharedManager.personalContext)
         cardDataSource?.delegate = self
         cardDataSource?.tableView = resultsTable
+        resultsTable?.dataSource = self
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.dimsBackgroundDuringPresentation = false
@@ -39,8 +44,26 @@ extension CollectionViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let controller = storyboard?.instantiateViewControllerWithIdentifier("CardDetailViewController") as! CardDetailViewController
-        controller.card = cardDataSource?.items[indexPath.row]
+        controller.card = cardDataSource?[indexPath.row]
         showViewController(controller, sender: self)
+    }
+}
+
+extension CollectionViewController:UITableViewDataSource {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = cardDataSource?.tableView(tableView, cellForRowAtIndexPath: indexPath) as! CollectionCell
+        let card = cardDataSource![indexPath.row]
+        let decks = card!.cc!.map { (cardInDeck) -> String in
+            let cardInDeck = cardInDeck as! MTGCardInDeck
+            return cardInDeck.deck!.title!
+        }
+        cell.typeLabel?.text = "In decks:"
+        cell.cardTextLabel?.text = decks.joinWithSeparator("\n")
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return cardDataSource!.tableView(tableView, numberOfRowsInSection: section)
     }
 }
 
@@ -50,8 +73,7 @@ extension CollectionViewController: SimpleListDataSourceDelegate {
         get {
             let fetchRequest:NSFetchRequest = NSFetchRequest(entityName: "MTGCard")
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-            //        fetchRequest.relationshipKeyPathsForPrefetching = []
-            var predicate = NSPredicate(format: "cc.@count > 0")//"SUBQUERY(deck, $sub, $sub.@count > 0) > 0")
+            var predicate = NSPredicate(format: "cc.@count > 0")
             if let searchText = searchText {
                 predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "name CONTAINS[cd] %@", searchText), predicate])
             }
