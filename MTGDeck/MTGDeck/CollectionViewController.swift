@@ -53,12 +53,15 @@ extension CollectionViewController:UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = cardDataSource?.tableView(tableView, cellForRowAtIndexPath: indexPath) as! CollectionCell
         let card = cardDataSource![indexPath.row]
-        let decks = card!.cc!.map { (cardInDeck) -> String in
+        let decks = card!.cc!.flatMap { (cardInDeck) -> String? in
             let cardInDeck = cardInDeck as! MTGCardInDeck
-            return cardInDeck.deck!.title!
+            return cardInDeck.deck?.title
         }
-        cell.typeLabel?.text = "In decks:"
-        cell.cardTextLabel?.text = decks.joinWithSeparator("\n")
+        
+        if decks.isEmpty == false {
+            cell.typeLabel?.text = "In decks:"
+            cell.cardTextLabel?.text = decks.joinWithSeparator(", ")
+        }
         return cell
     }
     
@@ -85,7 +88,12 @@ extension CollectionViewController: SimpleListDataSourceDelegate {
     func deletedItemAtIndexPath(indexPath: NSIndexPath) { }
 }
 
-extension CollectionViewController: UISearchBarDelegate {}
+extension CollectionViewController: UISearchBarDelegate {
+    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+        searchText = nil
+        cardDataSource?.reload()
+    }
+}
 
 extension CollectionViewController: UISearchResultsUpdating {
     func updateSearchResultsForSearchController(searchController: UISearchController) {

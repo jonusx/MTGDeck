@@ -37,7 +37,6 @@ class CardDetailViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         UIView.animateWithDuration(0.80, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .CurveEaseIn, animations: {
-//            self.cardArtViewHolder?.layer.shadowRadius = 20.0
             var transform = CATransform3DIdentity
             transform.m34 = -1.0/800.0
             transform = CATransform3DTranslate(transform, 0.0, 0.0, 70.0)
@@ -50,8 +49,6 @@ class CardDetailViewController: UIViewController {
         })
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(790000000)), dispatch_get_main_queue()) {
             UIView.animateWithDuration(0.8, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [.BeginFromCurrentState, .CurveEaseOut], animations: {
-                
-    //            self.cardArtViewHolder?.layer.shadowRadius = 10.0
                 var transform = CATransform3DIdentity
                 transform.m34 = -1.0/800.0
                 transform = CATransform3DTranslate(transform, 0.0, 0.0, 30.0)

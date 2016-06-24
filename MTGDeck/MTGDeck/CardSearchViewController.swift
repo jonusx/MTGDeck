@@ -14,7 +14,6 @@ protocol CardSearchViewControllerDelegate {
 
 class CardSearchViewController: UIViewController {
     let searchController:UISearchController = UISearchController(searchResultsController: nil)
-    private var cards:[MTGCard] = []
     private var searchText:String?
     private var searchTokens:Set<String>?
     var deck:MTGDeck?
@@ -77,12 +76,29 @@ class CardSearchViewController: UIViewController {
                 
                 let presenter = self.presentedViewController ?? self
                 let controller = UIAlertController(title: "Select Deck to add to:", message: "", preferredStyle: .ActionSheet)
+                controller.modalPresentationStyle = .Popover
                 for deck in decks {
                     controller.addAction(UIAlertAction(title: deck.title, style: .Default, handler: { (action) in
                         let deckManager = DeckManager(deck: deck)
                         deckManager.presentAddCard(card, onViewController: self)
                     }))
                 }
+                
+                controller.addAction(UIAlertAction(title: "Collection", style: .Default, handler: { (action) in
+                    let dict = card.toDictionary()
+                    let transferredCard = DataManager.sharedManager.parseCard(dict, intoContext: DataManager.sharedManager.personalContext)!
+                    let newCard = NSEntityDescription.insertNewObjectForEntityForName("MTGCardInDeck", inManagedObjectContext: DataManager.sharedManager.personalContext) as! MTGCardInDeck
+                    newCard.card = transferredCard
+                    newCard.count = 1
+                    try! DataManager.sharedManager.personalContext.save()
+                }))
+                
+                if let presenter = controller.popoverPresentationController {
+                    presenter.sourceView = self.view
+                    let cell = self.resultsTable?.cellForRowAtIndexPath(NSIndexPath(forRow: self.cardDataSource!.listItems.indexOf(card)!, inSection: 0)) as! CardCell
+                    presenter.sourceRect = self.view.convertRect(cell.imageView!.frame, fromView: cell)
+                }
+                
                 controller.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
                 presenter.showDetailViewController(controller, sender: nil)
             })

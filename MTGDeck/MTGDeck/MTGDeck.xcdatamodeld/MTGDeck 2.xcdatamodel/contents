@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15C50" minimumToolsVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15F34" minimumToolsVersion="Automatic">
     <entity name="MTGArtist" representedClassName="MTGArtist" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="cards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MTGCard" inverseName="artist" inverseEntity="MTGCard" syncable="YES"/>
@@ -48,7 +48,7 @@
     </entity>
     <entity name="MTGDeck" representedClassName="MTGDeck" syncable="YES">
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="cards" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MTGCardInDeck" inverseName="deck" inverseEntity="MTGCardInDeck" syncable="YES"/>
+        <relationship name="cards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MTGCardInDeck" inverseName="deck" inverseEntity="MTGCardInDeck" syncable="YES"/>
     </entity>
     <entity name="MTGRarity" representedClassName="MTGRarity" syncable="YES">
         <attribute name="rarity" optional="YES" attributeType="String" syncable="YES"/>

@@ -52,7 +52,6 @@ class DeckViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         showDetailViewController(alert, sender: self)
     }
-
 }
 
 extension DeckViewController: UITableViewDelegate {

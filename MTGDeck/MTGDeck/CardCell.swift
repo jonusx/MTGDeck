@@ -17,6 +17,9 @@ class CardCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         cardArtImageView?.image = nil
+        nameLabel?.text = ""
+        typeLabel?.text = ""
+        cardTextLabel?.text = ""
     }
 }
 

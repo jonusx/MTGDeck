@@ -86,6 +86,14 @@ public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManaged
             return items[index]
         }
     }
+    
+    var listItems:[T] {
+        if isUsingFRC {
+            return fetchedResultsController?.fetchedObjects as! [T]
+        }
+        return items
+    }
+    
     var objectCount:Int {
         return tableView(tableView!, numberOfRowsInSection: 0)
     }

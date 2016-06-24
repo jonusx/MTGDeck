@@ -98,7 +98,6 @@ class DeckDetailViewController: UIViewController {
     
     func addCard(card:MTGCard, count:Int) {
         deckManager?.addCard(card, count: count)
-//        cardDataSource?.reload()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -133,7 +132,7 @@ extension DeckDetailViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             if let itemToRemove = cardDataSource?[indexPath.row] {
-                cardDataSource?.context.deleteObject(itemToRemove)
+                itemToRemove.deck = nil
                 try! cardDataSource?.context.save()
             }
         }

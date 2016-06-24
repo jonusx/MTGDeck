@@ -76,9 +76,17 @@ class MTGDeck: NSManagedObject {
     lazy var colorBreakDown:ColorBreakdown? = ColorBreakdown(deck:self)
     lazy var curveBreakDown:CurveBreakDown? = CurveBreakDown(deck: self)
     
-    override func didSave() {
-        super.didSave()
+    override func willSave() {
+        super.willSave()
         colorBreakDown = ColorBreakdown(deck: self)
         curveBreakDown = CurveBreakDown(deck: self)
+    }
+    
+    override func didChangeValueForKey(inKey: String, withSetMutation inMutationKind: NSKeyValueSetMutationKind, usingObjects inObjects: Set<NSObject>) {
+        super.didChangeValueForKey(inKey, withSetMutation: inMutationKind, usingObjects: inObjects)
+        if inKey == "cards" {
+            colorBreakDown = ColorBreakdown(deck: self)
+            curveBreakDown = CurveBreakDown(deck: self)
+        }
     }
 }
