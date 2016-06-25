@@ -97,8 +97,10 @@ extension CollectionViewController: UISearchBarDelegate {
 
 extension CollectionViewController: UISearchResultsUpdating {
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        searchText = searchController.searchBar.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-        cardDataSource?.reload()
+        if searchController.searchBar.isFirstResponder() {
+            searchText = searchController.searchBar.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            cardDataSource?.reload()
+        }
     }
 }
 

@@ -8,6 +8,7 @@
 
 import UIKit
 
+//Basic deck ops
 struct DeckManager {
     let deck:MTGDeck
     

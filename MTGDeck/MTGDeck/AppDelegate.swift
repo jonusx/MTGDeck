@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        //Copy baked in store
         let url = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).last!.URLByAppendingPathComponent("StoredData.sqlite")
         if url.checkResourceIsReachableAndReturnError(nil) == false {
             try! NSFileManager.defaultManager().copyItemAtURL(NSBundle.mainBundle().URLForResource("StoredData", withExtension: "sqlite")!, toURL: url)

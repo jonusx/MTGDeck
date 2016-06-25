@@ -77,7 +77,7 @@ class ImageSearchOperation: NSOperation {
         CGContextSetLineWidth(context, 2.0)
         CGContextSetStrokeColorWithColor(context, UIColor.redColor().CGColor)
         let path = UIBezierPath()
-        for annotation in annotations {
+        for annotation in annotations { // Building the paths for the text
             path.appendPath(annotation.path)
         }
         CGContextAddPath(context, path.CGPath)

@@ -19,7 +19,7 @@ class CardArtDownloader {
     let imagesURL:NSURL = NSURL(string: "http://gatherer.wizards.com/Handlers/Image.ashx")!
     
     init() {
-        cacheQueue.maxConcurrentOperationCount = 1
+        cacheQueue.maxConcurrentOperationCount = 1 // Don't race condiditons
     }
     
     func downloadImageFrom(url:NSURL, completion:ArtCompletion) {
@@ -28,7 +28,7 @@ class CardArtDownloader {
             completions.append(completion)
             self.pendingCompletions[url] = completions
             
-            if let status = self.cache[url] where status == .InProgress {
+            if let status = self.cache[url] where status == .InProgress { // It's downloading.
                 return
             }
             

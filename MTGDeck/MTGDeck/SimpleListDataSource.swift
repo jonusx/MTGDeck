@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol SimpleListDataSourceDelegate {
+protocol SimpleListDataSourceDelegate { //For request and customizations
     var highlightedNameText:String? { get }
     var fetchRequest:NSFetchRequest { get }
 }
 
-public protocol SimpleListDisplayable {
+public protocol SimpleListDisplayable { //Allows multiple object to be displayed using this datasource
     var title:String? { get }
     var subtitle:String? { get }
     var detailText:String? { get }
@@ -75,6 +75,7 @@ extension MTGDeck: SimpleListDisplayable {
     var image: UIImage? { get { return nil } set {} }
 }
 
+/// Generic TableView datasource.
 public class SimpleListDataSource<T where T: SimpleListDisplayable, T: NSManagedObject>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
     var actionBlock:((T) -> ())?
     private var items:[T] = []

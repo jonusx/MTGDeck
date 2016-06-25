@@ -9,6 +9,7 @@
 import CoreData
 import UIKit
 
+///JSON importing for cards
 class DataManager {
     static let DataManagerDidMergeData:String = "DataManagerDidMergeData"
     static let sharedManager = DataManager(name: "StoredData.sqlite", options: nil)
